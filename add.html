@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+                background-color: #f4f4f4;
+            }
+
+            h3 {
+                color: #333;
+            }
+
+            h4 {
+                color: #007BFF;
+            }
+
+            input {
+                margin: 5px;
+                padding: 8px;
+                width: 150px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+
+            button {
+                background-color: #28a745;
+                color: white;
+                padding: 8px 15px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                margin: 5px;
+            }
+
+            button:hover {
+                background-color: #218838;
+            }
+
+            div {
+                margin: 10px auto;
+                padding: 10px;
+                background: white;
+                width: 50%;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            }
+           
+
+        </style>
+    </head>
+    <body>
+        <div>
+            <h3> WELCOME TO THE MATHS WORLD!</h3>
+        </div>
+        
+        <div>
+        <h4> Addition </h4>
+        Enter num1: <input type="number" id = 'num1'> <br>
+        Enter num2: <input type="number" id = 'num2'> <br>
+        <button onclick = "sum()"> Add numbers </button>  <br>
+        <div id="total"></div>  
+        </div>
+        
+        <div> 
+            <h4> Substration </h4>
+            Enter num1: <input type="number" id = 'num3'> <br>
+            Enter num2: <input type = "number" id = 'num4' > <br>
+            <button onclick="makesubstraction()"> Sbstract Numbers </button> <br>
+            <div id = "total1"></div> <!--<-- Displays the subtraction result in <div id="total1"></div> -->
+        </div>
+
+        <div> 
+            <h4> Multiplication </h4>
+            Enter num1: <input type = "number" id = 'num5'> <br>
+            Enter num2: <input type = "number" id = 'num6'> <br>
+            <button onclick = "getmultiplication()"> Multiply </button> <br>
+            <div id = 'total2'> </div> 
+        </div>
+
+        <div> 
+            <h4> Division </h4>
+            Enter num1: <input type ="number" id = 'num7'> <br>
+            Enter num2: <input type = "number" id = 'num8'> <br>
+            <button onclick="getdivision()"> Divide </button>
+            <div id = "total3"> </div>
+
+        </div>
+        
+     
+
+        </button>
+        <script>
+
+             const num1Elem = document.getElementById('num1');
+             const num2Elem = document.getElementById('num2');
+             const resElem = document.getElementById('total');
+
+             function sum()
+             {
+                const total = parseInt(num1Elem.value) +  parseInt(num1Elem.value);
+                resElem.innerText = total;
+             }
+
+             const num3 = document.getElementById('num3');
+             const num4 = document.getElementById('num4');
+             const result = document.getElementById('total1');
+
+             function makesubstraction()
+             {
+                const calc = parseInt(num3.value) -  parseInt(num4.value);
+                result.innerText = calc;
+             }
+
+             const num5 = document.getElementById('num5');
+             const num6 = document.getElementById('num6');
+             const result1 = document.getElementById('total2');
+
+             function getmultiplication()
+             {
+                 const Multiply = parseInt(num5.value) * parseInt(num6.value);
+                 result1.innerText = Multiply;
+             }
+
+             const num7 = document.getElementById('num7');
+             const num8 = document.getElementById('num8');
+             const result3 = document.getElementById('total3');
+
+             function getdivision()
+             {
+                 const divide =  (parseInt(num7.value)) / (parseInt(num8.value));
+                 result3.innerText = divide;
+             }
+            </script>
+    </body>
+</html>
