@@ -4,24 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Chatbot Processor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #output {
+            margin-top: 20px;
+            text-align: left;
+            padding: 10px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 </head>
 <body>
-    <h2> AI Web Generator</h2>
-    <input type="text" id="prompt" value=""> <br>
-    <button onclick="getData()">Process Request</button>
-    <div id="output"></div>
+
+    <div class="container">
+        <h2>AI Web Generator</h2>
+        <input type="text" id="prompt" placeholder="Enter your request here..."> <br>
+        <button onclick="getData()">Process Request</button>
+        <div id="output"></div>
+    </div>
 
     <script>
         const promptElem = document.getElementById('prompt');
         const outputElem = document.getElementById('output');
 
         async function getData() {
+            const apiKey = "YOUR_API_KEY"; // Replace with a secure method to store/retrieve the API key
+            
+            if (!promptElem.value.trim()) {
+                outputElem.innerHTML = "<p style='color:red;'>Please enter a valid request.</p>";
+                return;
+            }
+
+            outputElem.innerHTML = "<p>Processing request...</p>";
+
             try {
                 const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer YOUR_API_KEY' // Replace with a secure method to store/retrieve the API key
+                        'Authorization': 'Bearer ' + apiKey
                     },
                     body: JSON.stringify({
                         model: "llama-3.3-70b-versatile",
@@ -39,17 +107,16 @@
                 });
 
                 const data = await response.json();
-                console.log("API Response:", data); // Debugging
 
                 if (data.choices && data.choices.length > 0) {
                     outputElem.innerHTML = data.choices[0].message.content;
                     executeScripts(outputElem);
                 } else {
-                    outputElem.innerHTML = "Error: Unexpected response format.";
+                    outputElem.innerHTML = "<p style='color:red;'>Error: Unexpected response format.</p>";
                 }
             } catch (error) {
                 console.error("Error:", error.message);
-                outputElem.innerHTML = `Error: ${error.message}. Please try again later.`;
+                outputElem.innerHTML = `<p style='color:red;'>Error: ${error.message}. Please try again later.</p>`;
             }
         }
 
@@ -69,5 +136,6 @@
             }
         }
     </script>
+
 </body>
 </html>
