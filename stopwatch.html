@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 50px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.3);
+        }
+
+        button {
+            font-size: 18px;
+            padding: 12px 25px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .start {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .start:hover {
+            background-color: #2ecc71;
+        }
+
+        .stop {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .stop:hover {
+            background-color: #c0392b;
+        }
+
+        .reset {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .reset:hover {
+            background-color: #e67e22;
+        }
+    </style>
+</head>
+<body>
+    <h1> Your Own Stopwatch</h1>
+    <h4> Set your own time!</h4>
+    <div class="container">
+        <h1 id="display">00:00:00</h1>
+        <button class="start" onclick="startStopwatch()">Start</button>
+        <button class="stop" onclick="stopStopwatch()">Stop</button>
+        <button class="reset" onclick="resetStopwatch()">Reset</button>
+    </div>
+    
+    <script>
+        let timer;
+        let milliseconds = 0, seconds = 0, minutes = 0;
+        let running = false;
+
+        function updateDisplay() {
+            let formattedTime = 
+                (minutes < 10 ? "0" : "") + minutes + ":" + 
+                (seconds < 10 ? "0" : "") + seconds + ":" + 
+                (milliseconds < 10 ? "0" : "") + milliseconds;
+            document.getElementById("display").innerHTML = formattedTime;
+        }
+
+        function startStopwatch() {
+            if (!running) {
+                running = true;
+                timer = setInterval(() => {
+                    milliseconds++;
+                    if (milliseconds === 100) {
+                        milliseconds = 0;
+                        seconds++;
+                    }
+                    if (seconds === 60) {
+                        seconds = 0;
+                        minutes++;
+                    }
+                    updateDisplay();
+                }, 10);
+            }
+        }
+
+        function stopStopwatch() {
+            clearInterval(timer);
+            running = false;
+        }
+
+        function resetStopwatch() {
+            clearInterval(timer);
+            running = false;
+            milliseconds = 0;
+            seconds = 0;
+            minutes = 0;
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>
