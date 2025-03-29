@@ -6,56 +6,167 @@
     <title>GitHub Profile Analyzer</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: Arial, sans-serif;
-            background: #121212;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            transition: background 0.3s, color 0.3s;
-        }
-        .light-mode {
-            background: #f4f4f4;
-            color: #000;
-        }
-        .container {
-            width: 90%;
-            max-width: 400px;
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .profile-container {
-            display: none;
-            margin-top: 20px;
-            background: #252525;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        .profile-container img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 3px solid #4caf50;
-        }
-        .toggle-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-        }
-        canvas {
-            margin-top: 10px;
-        }
+       * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #121212;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    transition: background 0.3s, color 0.3s;
+}
+
+.light-mode {
+    background: #f4f4f4;
+    color: #222;
+}
+
+.container {
+    width: 90%;
+    max-width: 450px;
+    background: #1e1e1e;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s;
+}
+
+.light-mode .container {
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 2px solid #4caf50;
+    border-radius: 6px;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 1rem;
+    transition: background 0.3s, border 0.3s;
+}
+
+.light-mode input {
+    background: #eaeaea;
+    color: #222;
+    border: 2px solid #008cba;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #4caf50;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.light-mode button {
+    background: #008cba;
+}
+
+.profile-container {
+    display: none;
+    margin-top: 20px;
+    background: #252525;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s;
+}
+
+.light-mode .profile-container {
+    background: #f4f4f4;
+    color: #222;
+}
+
+.profile-container img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid #4caf50;
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #4caf50;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.light-mode a {
+    color: #008cba;
+}
+
+.toggle-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.toggle-btn:hover {
+    color: #4caf50;
+}
+
+.light-mode .toggle-btn {
+    color: #008cba;
+}
+
+canvas {
+    margin-top: 15px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 2px solid #4caf50;
+    border-radius: 6px;
+    background: #2a2a2a;
+    color: white;
+    resize: none;
+    font-size: 1rem;
+}
+
+.light-mode textarea {
+    background: #eaeaea;
+    color: #222;
+    border: 2px solid #008cba;
+}
+
     </style>
 </head>
 <body>
@@ -143,12 +254,34 @@
             alert(`Comparison: ${data.name} has ${data.public_repos} public repos`);
         }
         
-        function askAI() {
-            const query = document.getElementById("ai-query").value;
-            if (!query) return alert("Enter a question");
-            
-            document.getElementById("ai-response").innerHTML = `<p>AI Response: This is a sample AI-generated response for the profile.</p>`;
-        }
+        async function askAI() {
+    const query = document.getElementById("ai-query").value;
+    if (!query) return alert("Enter a question");
+
+    const responseDiv = document.getElementById("ai-response");
+    responseDiv.innerHTML = `<p>Loading...</p>`;
+
+    try {
+        const response = await fetch("https://api.openai.com/v1/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer YOUR_OPENAI_API_KEY`
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo",
+                messages: [{ role: "user", content: query }],
+                max_tokens: 100
+            })
+        });
+
+        const data = await response.json();
+        responseDiv.innerHTML = `<p>AI Response: ${data.choices[0].message.content}</p>`;
+    } catch (error) {
+        responseDiv.innerHTML = `<p>Error fetching AI response</p>`;
+    }
+}
+
     </script>
 </body>
 </html>
